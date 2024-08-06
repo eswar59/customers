@@ -1,4 +1,4 @@
-package com.piggy.customers.config;
+package com.piggy.customers.configuration;
 
 import com.piggy.customers.service.JpaUserDetailsService;
 import org.springframework.context.annotation.Bean;

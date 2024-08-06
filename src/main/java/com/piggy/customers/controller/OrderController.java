@@ -1,6 +1,8 @@
 package com.piggy.customers.controller;
 
 import com.piggy.customers.exception.UserIdNotExistsException;
+import com.piggy.customers.kafka.ProducerService;
+import com.piggy.customers.model.CustomerOrder;
 import com.piggy.customers.model.Order;
 import com.piggy.customers.model.User;
 import com.piggy.customers.repository.CustomerRepository;
@@ -19,10 +21,12 @@ public class OrderController {
 
     private CustomerRepository customerRepository;
     private OrderRepository orderRepository;
+    private ProducerService producerService;
 
-    public OrderController(CustomerRepository customerRepository, OrderRepository orderRepository){
+    public OrderController(CustomerRepository customerRepository, OrderRepository orderRepository, ProducerService producerService){
         this.orderRepository=orderRepository;
         this.customerRepository=customerRepository;
+        this.producerService=producerService;
     }
 
     @PostMapping("/customers/{id}/orders")
@@ -36,6 +40,10 @@ public class OrderController {
             order.setUser(customer.get());
             order.setStatus("ORDERED");
             orderRepository.save(order);
+            // create customerOrder and send to producer to send to topic
+            // we don't want to send user details to restaurant
+            CustomerOrder cOrder= new CustomerOrder(order.getId(), order.getStatus(), order.getAddress(), order.getMobile(), order.getItemId());
+            producerService.sendMessage(cOrder);
             return order;
         }
         else{
