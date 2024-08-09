@@ -2,7 +2,6 @@ package com.piggy.customers.controller;
 
 import com.piggy.customers.exception.UserIdNotExistsException;
 import com.piggy.customers.kafka.ProducerService;
-import com.piggy.customers.model.CustomerOrder;
 import com.piggy.customers.model.Order;
 import com.piggy.customers.model.User;
 import com.piggy.customers.repository.CustomerRepository;
@@ -10,8 +9,10 @@ import com.piggy.customers.repository.OrderRepository;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
+
 import java.security.Principal;
 import com.piggy.customers.exception.NotAuthorizedException;
+import shared.CustomerOrder;
 
 import java.util.List;
 import java.util.Optional;
